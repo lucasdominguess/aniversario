@@ -2,12 +2,10 @@
 namespace App\Infrastructure\Repository\SqlRepository;
 
 
-
 use App\classes\CreateLogger;
 
 use App\Infrastructure\Connection\Sql;
 use App\Infrastructure\Repository\SqlRepository\SqlInterface;
-use App\Infrastructure\Repository\Boletim_cirurgia_Repository\BoletimCirurgiaRepository;
 use PDOStatement;
 
 class SqlRepository implements SqlInterface { 
