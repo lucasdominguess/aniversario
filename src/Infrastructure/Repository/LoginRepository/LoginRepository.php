@@ -2,26 +2,25 @@
 namespace App\Infrastructure\Repository\LoginRepository;
 
 use App\Application\token\Token;
+use App\Infrastructure\Repository\BirthdayRepository\BirthdayRepository;
 use App\Infrastructure\Repository\SqlRepository\SqlRepository;
 
 class LoginRepository {
-    public function __construct(private SqlRepository $sql) {}
+    public function __construct(private SqlRepository $sql, private BirthdayRepository $birthdayRepository) {}
 
     public function login(int|string $login, string $pass) {
         $login = mb_strtoupper($login);
         $user = $this->logar_com_x($login, $pass);
-        // $sessao = $this->criar_sessao($user);
-        $session = $this->create_session($user);
 
-        if (!$user || !$session) {
-            // $this->log->loggerTelegram("ERRO-Criar-Usuario", "Falha na criação de Users/Session");
+        if ($user === null) {
             throw new \Exception("Não foi possível iniciar a sessão do usuário. Verifique se os cookies estão permitidos.");
         }
-        $user['Token'] = $session;
+
+        $user['Token'] = $this->create_session($user);
         return $user;
     }
 
-    private function create_session($user) {
+    private function create_session($user): string {
         
       
         return Token::create()->generateToken($user);
@@ -32,15 +31,15 @@ class LoginRepository {
     private function logar_com_x(string $login, string $pass)
     {
         [$ldap_mail, $ldap_name, $ldap_login] = $this->logar_ldap($login, $pass);
-        // $usuario = $this->birthdayRepository->selectUserByLogin($login);
+        $usuario = $this->birthdayRepository->selectUserByLogin($login);
 
-        // if ($usuario === null) {
-        //     $this->birthdayRepository->insert('usuarios', [
-        //         'login_rede' => mb_strtoupper($ldap_login),
-        //         'name' => $ldap_name,
-        //         'email' => $ldap_mail,
-        //     ]);
-        // }
+        if ($usuario === null) {
+            $this->birthdayRepository->insert('usuarios', [
+                'login_rede' => mb_strtoupper($ldap_login),
+                'name' => $ldap_name,
+                'email' => $ldap_mail,
+            ]);
+        }
 
         return [$ldap_mail, $ldap_name, $ldap_login];
         // return $this->birthdayRepository->selectUserByLogin($login);

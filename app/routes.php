@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Slim\App;
+use App\Application\Actions\Editar\EditarAction;
 use App\Application\Actions\User\ViewUserAction;
 use App\Application\Actions\User\ListUsersAction;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -10,6 +11,7 @@ use App\Application\Actions\Cadastro\CadastrarAction;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use App\Application\Actions\LoginAction\LoginSessionAction;
+
 
 
 return function (App $app) {
@@ -24,6 +26,7 @@ return function (App $app) {
      });
 
     $app->post("/login",LoginSessionAction::class);
+    $app->post("/edit",EditarAction::class);
 
     // $app->get('/', function (Request $request, Response $response) {
     //     $response->getBody()->write('Hello world!');

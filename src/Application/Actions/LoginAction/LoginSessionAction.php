@@ -19,14 +19,14 @@ class LoginSessionAction extends LoginAction {
 
         // return $this->respondWithData($body);
         try {
-            $r = new LoginRepository($this->sqlRepository);
+            $r = new LoginRepository($this->sqlRepository, $this->birthdayRepository);
             $loginResult = $r->login(strtoupper($body['login']), $body['senha']);
 
             if (isset($loginResult['error'])) {
                 return $this->respondWithData($loginResult['error'],401);
             }
 
-            $msg = ['summary' => 'Logado com sucesso!','login👌' => USER_LOGIN,'email' => USER_EMAIL,'name' => USER_NAME,'token'=>$loginResult['Token']];
+            $msg = ['summary' => 'Logado com sucesso!','login' => USER_LOGIN,'email' => USER_EMAIL,'name' => USER_NAME,'token'=>$loginResult['Token']];
             $this->createLogger->loggerCSV("login_realizado", "Usuario " . USER_NAME . " Realizou login");
      
 

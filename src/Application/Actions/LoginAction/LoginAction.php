@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace App\Application\Actions\LoginAction;
 
 use App\classes\Helpers;
-use App\Infrastructure\Repository\SqlRepository\SqlRepository;
 use voku\helper\AntiXSS;
 use App\classes\CreateLogger;
 use App\Application\Actions\Action;
 use App\Infrastructure\Repository\SqlRepository\SqlInterface;
+use App\Infrastructure\Repository\SqlRepository\SqlRepository;
+use App\Infrastructure\Repository\BirthdayRepository\BirthdayRepository;
 
 
 
@@ -22,7 +23,8 @@ abstract class LoginAction extends Action
     public function __construct(
         protected SqlRepository $sqlRepository,
         protected CreateLogger $createLogger,
-        protected AntiXSS $antiXSS ,
+        protected AntiXSS $antiXSS,
+        protected BirthdayRepository $birthdayRepository,
         )
     {}
 }
