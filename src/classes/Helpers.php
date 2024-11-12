@@ -107,7 +107,8 @@ trait Helpers{
             $date === null => 'Data inválida',
             !preg_match(Regex::DATE, $date) => 'Formato de data inválido',
             ((int)$day||(int)$month) < 1 => 'Dia ou mês inválido',
-            $date > $GLOBALS['date']=> 'Data maior que o dia atual, favor verificar',
+            $date > $GLOBALS['Ymd']=> 'Data maior que o dia atual, favor verificar',
+            (new \DateTime($date))->diff(new \DateTime())->y < 18 => 'Idade mínima de 18 anos não atingida',
             default => null
         };
 

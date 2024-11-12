@@ -10,11 +10,21 @@ class RequestParams
     public const SDATE = 'sdate';
     public const EDATE = 'edate';
 
+    public const NASCIMENTO = 'nascimento';
+
     //parametros para ids
     public const ID = 'id';
     public const IDS = 'ids';
     public const UNIDADE = 'unidade';
     public const ID_UNIDADE = 'id_unidade';
+
+    //parametros para nomes 
+    public const NAME = 'name';
+    public const NOME = 'nome';
+
+    //parametros para email ;
+    public const EMAIL = 'email';
+
 
     //inputs 
     public const E1 = 'E1';
@@ -45,7 +55,8 @@ class RequestParams
             self::DATA,
             self::DATE,
             self::SDATE,
-            self::EDATE
+            self::EDATE,
+            self::NASCIMENTO
         ];
     }
     public static function IdFields(): array
@@ -54,6 +65,20 @@ class RequestParams
             self::ID,
             self::IDS,
             self::ID_UNIDADE
+        ];
+    }
+    public static function NameFilds(): array 
+    {
+        return [
+            self::NAME,
+            self::NOME
+
+        ];
+    }
+    public static function EmailFields():array 
+    {   
+        return [
+            self::EMAIL
         ];
     }
     public static function InputFields(): array
