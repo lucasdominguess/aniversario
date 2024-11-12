@@ -8,11 +8,6 @@ class ExcluirAction extends BirthdayAction{
     public function action(): ResponseInterface {
         $dados = $this->validateParams->verifyPost($this->request);
 
-        if (empty($dados['id'])) {
-            // Throw new \Exception('Necessario fornecer um id');
-            return $this->respondWithData(['status' => 'fail', 'msg' => 'Necessario fornecer um id'], 404);
-        }
-
         $this->birthdayRepository->delete($dados['id'], 'aniversarios');
 
         $this->logGenerate()->loggerCSV("cadastro_aniversario", "Cadastro de aniversariante excluido com sucesso", 'info', $dados['name']);

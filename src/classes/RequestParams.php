@@ -17,6 +17,7 @@ class RequestParams
     public const IDS = 'ids';
     public const UNIDADE = 'unidade';
     public const ID_UNIDADE = 'id_unidade';
+    public const ID_EMPRESA = 'id_empresa';
 
     //parametros para nomes 
     public const NAME = 'name';
@@ -64,7 +65,8 @@ class RequestParams
         return [
             self::ID,
             self::IDS,
-            self::ID_UNIDADE
+            self::ID_UNIDADE,
+            self::ID_EMPRESA
         ];
     }
     public static function NameFilds(): array 

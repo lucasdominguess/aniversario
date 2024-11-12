@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Application\Excluir\ExcluirAction;
 use Slim\App;
+use App\Application\Excluir\ExcluirAction;
 
+use App\Application\Actions\Editar\EditarAction;
 use App\Application\Actions\User\ViewUserAction;
 use App\Application\Actions\User\ListUsersAction;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -31,6 +32,8 @@ return function (App $app) {
 
     $app->post("/login",LoginSessionAction::class);
 
+    $app->post("/edit",EditarAction::class);
+    $app->post("/delete",ExcluirAction::class);
     $app->post("/cadastrar",CadastrarAction::class);
    
     $app->get("/listar_usuario",ListUserAction::class); //id ? opcional
