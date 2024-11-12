@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Application\Excluir\ExcluirAction;
 use Slim\App;
 use App\Application\Actions\Editar\EditarAction;
 use App\Application\Actions\User\ViewUserAction;
@@ -27,6 +28,7 @@ return function (App $app) {
 
     $app->post("/login",LoginSessionAction::class);
     $app->post("/edit",EditarAction::class);
+    $app->post("/delete",ExcluirAction::class);
 
     // $app->get('/', function (Request $request, Response $response) {
     //     $response->getBody()->write('Hello world!');

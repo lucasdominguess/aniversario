@@ -1,6 +1,7 @@
 <?php
 namespace App\Application\Actions\Editar;
 
+use App\classes\Regex;
 use Psr\Http\Message\ResponseInterface;
 use App\Application\Actions\BirthdayAction;
 
@@ -16,10 +17,10 @@ class EditarAction extends BirthdayAction
             return $this->respondWithData($msg, 404);
         }
         $response = match (true) {
-            !isset($dados['id']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer um id'],
+            !empty($isset['id']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer um id'],
             empty($dados['name']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer um nome'],
             empty($dados['nascimento']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer uma data de nascimento'],
-            empty($dados['empresa']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer uma empresa'],
+            empty($dados['id_empresa']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer uma empresa'],
             default => $this->edit($dados)
         };
 
