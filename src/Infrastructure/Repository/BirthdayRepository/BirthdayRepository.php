@@ -83,54 +83,65 @@ class BirthdayRepository extends SqlRepository
             return $r;
     }
     public function SelectUsersbyDate($date) :array |null
-    {
-        $stmt=$this->sql->prepare(
-
-            "WITH A AS (
-            SELECT * from aniversarios , to_char(nascimento,'mm') as mes 
-            WHERE mes = :date 
-            order by nascimento desc,nome)
-            SELECT 
-                a.id,
-                a.id_empresa,
-                a.nome,
-                a.nascimento,
-                a.mes ,
-                nome_empresa as empresa from A 
-            JOIN empresas em on A.id_empresa = em.id"
-        );
-
-            $stmt->bindValue(':date',$date);
-            $stmt->execute();
-            $r=$stmt->fetchAll(\PDO::FETCH_ASSOC); 
-            if ($stmt->rowCount() == 0 )return ['summary'=>'Nenhum registro encontrado'];
-            return $r ;
+    {   
+        try {
+         
+            $stmt=$this->sql->prepare(
+    
+                "WITH A AS (
+                SELECT * from aniversarios , to_char(nascimento,'mm') as mes 
+                WHERE mes = :date 
+                order by nascimento desc,nome)
+                SELECT 
+                    a.id,
+                    a.id_empresa,
+                    a.nome,
+                    a.nascimento,
+                    a.mes ,
+                    nome_empresa as empresa from A 
+                JOIN empresas em on A.id_empresa = em.id"
+            );
+    
+                $stmt->bindValue(':date',$date);
+                $stmt->execute();
+                $r=$stmt->fetchAll(\PDO::FETCH_ASSOC); 
+                if ($stmt->rowCount() == 0 )return ['summary'=>'Nenhum registro encontrado'];
+                return $r ;
+        } catch (\Throwable $th) {
+            $this->createLogger->loggerCSV('erro_buscar_aniversariantes_por_data', $th->getMessage());
+            throw new \Exception('Erro ao buscar aniversariantes por data');
+        
+        }
     }
     public function SelectUsers(int|string $id=null) :array |null
-    {
-        $cmd =(
-
-            "WITH A AS (
-            SELECT * from aniversarios           
-            order by nome ,nascimento desc)
-            SELECT 
-                a.id,
-                a.id_empresa,
-                a.nome,
-                a.nascimento,
-                nome_empresa as empresa from A 
-            JOIN empresas em on A.id_empresa = em.id"
-        );
-        if (!empty($id)) $cmd.= " where a.id = :id";
-
-        $stmt= $this->sql->prepare($cmd);
-
-        if (!empty($id)) $stmt->bindValue(":id",$id);
-
-            $stmt->execute();
-            $r=$stmt->fetchAll(\PDO::FETCH_ASSOC); 
-            if ($stmt->rowCount() == 0 )return ['summary'=>'Nenhum registro encontrado'];
-            return $r ;
+    {   
+        try {
+            $cmd ="WITH A AS (
+                SELECT * from aniversarios           
+                order by nome ,nascimento desc)
+                SELECT 
+                    a.id,
+                    a.id_empresa,
+                    a.nome,
+                    a.nascimento,
+                    nome_empresa as empresa from A 
+                JOIN empresas em on A.id_empresa = em.id";
+                          
+            if (!empty($id)) $cmd.= " where a.id = :id";
+    
+            $stmt= $this->sql->prepare($cmd);
+    
+            if (!empty($id)) $stmt->bindValue(":id",$id);
+    
+                $stmt->execute();
+                $r=$stmt->fetchAll(\PDO::FETCH_ASSOC); 
+                if ($stmt->rowCount() == 0 )return ['summary'=>'Nenhum registro encontrado'];
+                return $r ;
+          
+        } catch (\Throwable $th) {
+            $this->createLogger->loggerCSV('erro_buscar_aniversariantes', $th->getMessage());
+            throw new \Exception('Erro ao buscar aniversariantes');
+        }
     }
     
     
