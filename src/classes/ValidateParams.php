@@ -45,7 +45,7 @@ public function verifyDetails(array|string|int $dados)
     
             if(in_array($key,RequestParams::DateFields())) $this->verifyDate($value);
 
-            // elseif(in_array($key,RequestParams::IdFields())) $this->verifyRegex($value,Regex::NUMERO_INT); 
+            elseif(in_array($key,RequestParams::IdFields())) $this->verifyRegex($value,Regex::NUMERO_INT); 
             elseif(in_array($key,RequestParams::NameFilds())) $this->verifyRegex($value,Regex::NAME);
             elseif(is_numeric($value)) $this->verifyRegex($value,Regex::NUMERO_INT);    
 
