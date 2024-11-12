@@ -3,13 +3,18 @@
 declare(strict_types=1);
 
 use Slim\App;
+
 use App\Application\Actions\User\ViewUserAction;
 use App\Application\Actions\User\ListUsersAction;
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Application\Actions\Listagem\ListUserAction;
 use App\Application\Actions\Cadastro\CadastrarAction;
+use App\Application\Actions\Listagem\ListAllUserAction;
+use App\Application\Actions\Listagem\ListOneUserAction;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use App\Application\Actions\LoginAction\LoginSessionAction;
+use App\Application\Actions\Listagem\ListAniversariosAction;
 
 
 return function (App $app) {
@@ -25,13 +30,10 @@ return function (App $app) {
 
     $app->post("/login",LoginSessionAction::class);
 
-    // $app->get('/', function (Request $request, Response $response) {
-    //     $response->getBody()->write('Hello world!');
-    //     return $response;
-    // });
+    $app->post("/cadastrar",CadastrarAction::class);
+   
+    $app->get("/listar_usuario",ListUserAction::class); //id ? opcional
+    $app->get("/listar_mes",ListAniversariosAction::class);
+   
 
-    // $app->group('/users', function (Group $group) {
-    //     $group->get('', ListUsersAction::class);
-    //     $group->get('/{id}', ViewUserAction::class);
-    // });
 };
