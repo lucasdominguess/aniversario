@@ -49,8 +49,8 @@ class BirthdayRepository extends SqlRepository
 
     public function update($id,$table,$dados,$params='id') : int 
     {   
-        $stmt  = $this->sql->update($id,$table,$dados,$params);
         try {
+            $stmt  = $this->sql->update($id,$table,$dados,$params);
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\Exception $e) {

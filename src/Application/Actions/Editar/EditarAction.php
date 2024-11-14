@@ -16,11 +16,19 @@ class EditarAction extends BirthdayAction
             $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer um id'];
             return $this->respondWithData($msg, 404);
         }
+
+        match(true){
+            strtoupper($dados['empresa'])=='PREFEITURA' => $dados['id_empresa'] = 1,
+            strtoupper($dados['empresa'])=='G4F' => $dados['id_empresa'] = 2,
+            strtoupper($dados['empresa'])=='TERCEIRA' => $dados['id_empresa'] = 3,
+            default => throw new \Exception('Empresa não encontrada')
+        };
+
         $response = match (true) {
-            !empty($isset['id']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer um id'],
-            empty($dados['name']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer um nome'],
-            empty($dados['nascimento']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer uma data de nascimento'],
-            empty($dados['id_empresa']) => $msg = ['status' => 'fail', 'msg' => 'Necessario fornecer uma empresa'],
+            !isset($dados['id']) => $msg = ['status' => 'fail', 'msg' => 'Necessário fornecer um id'],
+            !isset($dados['name']) => $msg = ['status' => 'fail', 'msg' => 'Necessário fornecer um nome'],
+            !isset($dados['nascimento']) => $msg = ['status' => 'fail', 'msg' => 'Necessário fornecer uma data de aniversário'],
+            !isset($dados['empresa']) => $msg = ['status' => 'fail', 'msg' => 'Necessário fornecer uma empresa'],
             default => $this->edit($dados)
         };
 
@@ -29,7 +37,7 @@ class EditarAction extends BirthdayAction
     }
     private function edit($dados) {
         $r = [
-            'id_empresa'=> $dados['empresa'],
+            'id_empresa'=> $dados['id_empresa'],
             'nome' => strtoupper($dados['name']),
             'nascimento'=> $dados['nascimento'],
         ];

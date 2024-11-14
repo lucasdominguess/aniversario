@@ -11,6 +11,7 @@ use App\Application\Actions\BirthdayAction;
 class ListUserAction extends BirthdayAction
 { 
 
+
     public function action(): ResponseInterface
     {
         $dados = $this->validateParams->verifyGet($this->request,false,true);
@@ -21,9 +22,9 @@ class ListUserAction extends BirthdayAction
         $r = $this->birthdayRepository->SelectUsers($id);
 
         foreach ($r as $key => $value) {
-            $r[$key]['nome'] = strtoupper($value['nome']);
+            $r[$key]['nome'] = mb_strtoupper($value['nome']);
             $date = new DateTime($value['nascimento'],new DateTimeZone('America/Sao_Paulo'));
-            $r[$key]['nascimento'] = $date->format('d-m-Y');
+            $r[$key]['nascimento'] = $date->format('m-d-Y');
         }
 
         return $this->respondWithData($r);

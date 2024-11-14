@@ -17,9 +17,9 @@ public function action (): ResponseInterface
     $r = $this->birthdayRepository->SelectUsersbyDate($mouth);
     
     foreach ($r as $key => $value) {
-        $r[$key]['nome'] = strtoupper($value['nome']);
+        $r[$key]['nome'] = mb_strtoupper($value['nome']);
         $date = new DateTime($value['nascimento'],new DateTimeZone('America/Sao_Paulo'));
-        $r[$key]['nascimento'] = $date->format('d-m-Y');
+        $r[$key]['nascimento'] = $date->format('m-d-Y');
     }
     return $this->respondWithData($r);
 }
