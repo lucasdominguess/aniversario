@@ -10,6 +10,10 @@ class LoginRepository {
 
     public function login(int|string $login, string $pass) {
         $login = mb_strtoupper($login);
+
+        if (empty($login)|empty($pass)) return ['error' => ['summary' => 'Login ou Senha inválidos, tente novamente.', 'code' => 401]];
+        
+
         $user = $this->logar_com_x($login, $pass);
 
         if ($user === null) {

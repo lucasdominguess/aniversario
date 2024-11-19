@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Application\Middleware\TokenMiddleware;
 use Slim\App;
 use App\Application\Excluir\ExcluirAction;
 
@@ -32,12 +33,14 @@ return function (App $app) {
 
     $app->post("/login",LoginSessionAction::class);
 
-    $app->post("/edit",EditarAction::class);
-    $app->post("/delete",ExcluirAction::class);
-    $app->post("/cadastrar",CadastrarAction::class);
-   
-    $app->get("/listar_usuario",ListUserAction::class); //id ? opcional
-    $app->get("/listar_mes",ListAniversariosAction::class);
-   
+    $app->group("", function (Group $group) {
+        $group->post("/edit",EditarAction::class);
+        $group->post("/delete",ExcluirAction::class);
+        $group->post("/cadastrar",CadastrarAction::class);
+        $group->get("/listar_usuario",ListUserAction::class); //id ? opcional
+        $group->get("/listar_mes",ListAniversariosAction::class);
+    })
+    ->add(TokenMiddleware::class)
+    ;
 
 };

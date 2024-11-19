@@ -14,12 +14,6 @@ class LoginSessionAction extends LoginAction
         $request = $this->request->getParsedBody();
         $body = $this->antiXSS->xss_clean($request);
 
-        if (empty($body['login']) || empty($body['senha'])) {
-            $msg = ['summary' => 'Login ou Senha inválidos, tente novamente!'];
-            return $this->respondWithData($msg);
-        }
-
-        // return $this->respondWithData($body);
         try {
             $r = new LoginRepository($this->sqlRepository, $this->birthdayRepository);
             $loginResult = $r->login(strtoupper($body['login']), $body['senha']);
