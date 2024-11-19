@@ -20,8 +20,8 @@ class BirthdayRepository extends SqlRepository
     
     public function delete($id,$table,string|int $params = 'id'):int
     {
-        $stmt= $this->sql->delete($id,$table);
         try {
+            $stmt= $this->sql->delete($id,$table);
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\Exception $e) {
@@ -72,7 +72,7 @@ class BirthdayRepository extends SqlRepository
             
         }
     }
-    public function selectUserByLogin($login) :array |null 
+    public function selectUserByLogin($login) :array|null|bool
     {
        
             $stmt = $this->sql->prepare("SELECT * from usuarios where login_rede = :login");

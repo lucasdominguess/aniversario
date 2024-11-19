@@ -120,12 +120,12 @@ trait Helpers{
     }
     public function verifyRegex($dados,$regex){
         if(!preg_match($regex,$dados)){
-            throw new \Exception("Dados enviados nao correspondem ao padrao requerido");
+            throw new \Exception("Dados enviados não correspondem ao padrão requerido");
         }
     }
     public function monitoraFormat($dados) {
         
-        if (empty($dados)) throw new \Exception('Não ha dados de monitoramento');
+        if (empty($dados)) throw new \Exception('Não há dados de monitoramento');
 
         foreach ($dados as &$linha) {
             $linha['data'] = $linha['data'].' '.$linha['hora'];            

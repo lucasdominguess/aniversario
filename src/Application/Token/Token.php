@@ -31,7 +31,7 @@ class Token
      * @param $email Adiciona email do usuario ao payload
      * @param string $time Adiciona o tempo limite para expirar o token 
      */
-    public function generateToken($user)
+    public function generateToken($user): string
     {         
         global $env;
         $time =  $env['exp_token'] ?? '60 minutes';

@@ -1,14 +1,16 @@
-<?php 
+<?php
 namespace App\Application\Actions\LoginAction;
 
 use Psr\Http\Message\ResponseInterface;
 use App\Infrastructure\Repository\LoginRepository\LoginRepository;
 
 
-class LoginSessionAction extends LoginAction {
+class LoginSessionAction extends LoginAction
+{
 
-    public function action(): ResponseInterface {
-        global $env ;
+    public function action(): ResponseInterface
+    {
+        global $env;
         $request = $this->request->getParsedBody();
         $body = $this->antiXSS->xss_clean($request);
 
@@ -23,12 +25,20 @@ class LoginSessionAction extends LoginAction {
             $loginResult = $r->login(strtoupper($body['login']), $body['senha']);
 
             if (isset($loginResult['error'])) {
-                return $this->respondWithData($loginResult['error'],401);
+                return $this->respondWithData($loginResult['error'], 401);
             }
 
-            $msg = ['summary' => 'Logado com sucesso!','login' => USER_LOGIN,'email' => USER_EMAIL,'name' => USER_NAME,'token'=>$loginResult['Token']];
+            // $loginList = ['X397762','X535099','X492420'];
+            $loginTest = $this->sqlRepository->selectUserOfId(strtoupper($loginResult[2]), 'usuarios', 'login_rede');
+
+            if (!isset($loginTest[0]['login_rede'])) {
+                $msg = ['summary' => 'Sem permissão de acesso, contate o desenvolvedor!'];
+                $this->createLogger->loggerCSV('erro_logar_sessao', "Tentativa de login sem permissão de acesso para o usuario: $loginResult[1], email: $loginResult[0] e login: " . strtoupper($loginResult[2]));
+                return $this->respondWithData($msg, 401);
+            }
+            $msg = ['summary' => 'Logado com sucesso!', 'login' => USER_LOGIN, 'email' => USER_EMAIL, 'name' => USER_NAME, 'token' => $loginResult['Token']];
             $this->createLogger->loggerCSV("login_realizado", "Usuario " . USER_NAME . " Realizou login");
-     
+
 
             return $this->respondWithData($msg);
 
