@@ -12,9 +12,9 @@ class ListAniversariosAction extends BirthdayAction{
 public function action (): ResponseInterface
 {   
     $date =new DateTime('now',new DateTimeZone('America/Sao_Paulo'));
-    $mouth= $date->format('m');
+    $month= $date->format('m');
 
-    $r = $this->birthdayRepository->SelectUsersbyDate($mouth);
+    $r = $this->birthdayRepository->SelectUsersbyDate($month);
     
     foreach ($r as $key => $value) {
         $r[$key]['nome'] = mb_strtoupper($value['nome']);

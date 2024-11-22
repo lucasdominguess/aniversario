@@ -9,28 +9,19 @@ class LoginRepository {
     public function __construct(private SqlRepository $sql, private BirthdayRepository $birthdayRepository) {}
 
     public function login(int|string $login, string $pass) {
-        $login = mb_strtoupper($login);
-
-        if (empty($login)|empty($pass)) return ['error' => ['summary' => 'Login ou Senha inválidos, tente novamente.', 'code' => 401]];
-        
-
-        $user = $this->logar_com_x($login, $pass);
-
-        if ($user === null) {
-            throw new \Exception("Não foi possível iniciar a sessão do usuário. Verifique se os cookies estão permitidos.");
+        if (!$login || !$pass) {
+            return ['error' => ['summary' => 'Login ou Senha inválidos, tente novamente.', 'code' => 401]];
         }
 
-        $user['Token'] = $this->create_session($user);
-        return $user;
-    }
-
-    private function create_session($user): string {
+        $login = mb_strtoupper($login);
         
-      
-        return Token::create()->generateToken($user);
-   
-       
-       }
+        $user = $this->logar_com_x($login, $pass);
+        try {
+            return array_merge($user, ['Token' => Token::create()->generateToken($user)]);
+        } catch (\Exception $e) {
+            return ['error' => ['summary' => 'Não foi possível iniciar a sessão do usuário. Verifique se os cookies estão permitidos.', 'code' => 500]];
+        }
+    }
 
     private function logar_com_x(string $login, string $pass)
     {
@@ -46,7 +37,6 @@ class LoginRepository {
         }
 
         return [$ldap_mail, $ldap_name, $ldap_login];
-        // return $this->birthdayRepository->selectUserByLogin($login);
     }
     private function logar_ldap(string $user, string $pass): array
     {
@@ -67,6 +57,7 @@ class LoginRepository {
 
         $search = ldap_search($conn, $env['LDAP_BASE'], "sAMAccountName=$user");
         $info = ldap_get_entries($conn, $search);
+
 
         if (!isset($info[0]['mail'][0])) {
             // $this->log->loggerCSV("Erro-login", "Usuário $user tentou efetuar login com credenciais inválidas");

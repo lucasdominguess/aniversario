@@ -65,35 +65,26 @@ class Token
     {   
         global $env;
         $key = $env['secretkey'];
-        // $cookie = $_COOKIE["Authorization"] ?? null ;
 
-        if ($cookie == null || $cookie == ''){
-            $this->log->loggerCSV("token_decoded_fail",'tentativa de acesso com Cookie/Token Inexistente ou Invalido','warning',$_SERVER['REMOTE_ADDR']);
-            // $this->destructHeaderToken();
+        if (empty($cookie)) {
+            $this->log->loggerCSV("token_decoded_fail", 'tentativa de acesso com Cookie/Token Inexistente ou Invalido', 'warning', $_SERVER['REMOTE_ADDR']);
             throw new Exception("Cookie/Token Inexistente ou Invalido");
-        };
+        }
 
         try {
-            $decoded = JWT::decode($cookie, new Key($key, 'HS256'));
-            $decoded_array = (array) $decoded;      
+            $decoded_array = (array) JWT::decode($cookie, new Key($key, 'HS256'));
             $this->tokenConst($decoded_array);
-
-        } catch (ExpiredException $ex) { // Captura um token expirado
-            // $this->destructHeaderToken();
+        } catch (ExpiredException $ex) {
             $this->log->loggerCSV("token_decoded_fail_", 'tentativa de acesso com Token Expirado', 'warning', $_SERVER['REMOTE_ADDR']);
             throw new Exception("Acesso nao permitido: Cookie/Token Expirado", 403);
-
-        } catch (SignatureInvalidException $ex) { // Captura um token com assinatura inválida
-            // $this->destructHeaderToken();
+        } catch (SignatureInvalidException $ex) {
             $this->log->loggerCSV("token_decoded_fail_", 'tentativa de acesso com Token Alterado ou Invalido', 'warning', $_SERVER['REMOTE_ADDR']);
             throw new Exception("Acesso nao permitido: Cookie/Token Invalido", 403);
-
-        } catch (\Throwable $th) { 
-            // $this->destructHeaderToken();
+        } catch (\Throwable $th) {
             $this->log->loggerCSV("token_decoded_fail", $th->getMessage(), 'warning', $_SERVER['REMOTE_ADDR']);
             throw new Exception("Erro ao processar o Token", 500);
         }
- 
+
         return $decoded_array;
     }
     public function tokenConst(array $payload)

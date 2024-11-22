@@ -13,7 +13,7 @@ class Regex
     CONST EMAIL_ROOT = "/^([\wàáâãçèéêìíîòóôõùúû'_.]{4,}@[\w]{5,10}\.(sp|com)(.gov)?(.br)?|root)$/im" ; 
     CONST PASSWORD = '/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#_])[0-9a-zA-Z$*&@#_]{8,19}/' ; 
     
-    CONST NAME = "/^[a-zàáâãçèéêìíîòóôõùúû'\s]{3,}$/im" ; 
+    CONST NAME = "/^[a-zàáâãçèéêìíîòóôõùúû'A-ZÀÁÂÃÇÈÉÊÌÍÎÒÓÔÕÙÚÛ\s]{3,}$/im" ; 
 
     CONST SITE = "/(https|http|www):?\/?\/?\w*\.\w*\.?\w{3}?(.br)?/im"; 
 

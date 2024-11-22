@@ -5,6 +5,7 @@ namespace App\Application\Actions\LoginAction;
 use App\classes\Helpers;
 use voku\helper\AntiXSS;
 use App\classes\CreateLogger;
+use App\classes\ValidateParams;
 use App\Application\Actions\Action;
 use App\Infrastructure\Repository\SqlRepository\SqlInterface;
 use App\Infrastructure\Repository\SqlRepository\SqlRepository;
@@ -25,6 +26,7 @@ abstract class LoginAction extends Action
         protected CreateLogger $createLogger,
         protected AntiXSS $antiXSS,
         protected BirthdayRepository $birthdayRepository,
+        protected ValidateParams $validateParams,
         )
     {}
 }
