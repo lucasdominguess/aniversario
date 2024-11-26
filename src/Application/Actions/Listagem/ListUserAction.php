@@ -25,6 +25,7 @@ class ListUserAction extends BirthdayAction
             $r[$key]['nome'] = mb_strtoupper($value['nome']);
             $date = new DateTime($value['nascimento'],new DateTimeZone('America/Sao_Paulo'));
             $r[$key]['nascimento'] = $date->format('m-d-Y');
+            // $r[$key]['nascimento'] = $date->format('d/m/Y');
         }
 
         return $this->respondWithData($r);
