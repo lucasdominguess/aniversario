@@ -62,11 +62,11 @@ class Token
     }
 
     public function decodedToken($cookie)
-    {   
+    {
         global $env;
         $key = $env['secretkey'];
 
-        if (empty($cookie)) {
+        if (!$cookie) {
             $this->log->loggerCSV("token_decoded_fail", 'tentativa de acesso com Cookie/Token Inexistente ou Invalido', 'warning', $_SERVER['REMOTE_ADDR']);
             throw new Exception("Cookie/Token Inexistente ou Invalido");
         }
@@ -74,18 +74,15 @@ class Token
         try {
             $decoded_array = (array) JWT::decode($cookie, new Key($key, 'HS256'));
             $this->tokenConst($decoded_array);
-        } catch (ExpiredException $ex) {
-            $this->log->loggerCSV("token_decoded_fail_", 'tentativa de acesso com Token Expirado', 'warning', $_SERVER['REMOTE_ADDR']);
-            throw new Exception("Acesso nao permitido: Cookie/Token Expirado", 403);
-        } catch (SignatureInvalidException $ex) {
-            $this->log->loggerCSV("token_decoded_fail_", 'tentativa de acesso com Token Alterado ou Invalido', 'warning', $_SERVER['REMOTE_ADDR']);
-            throw new Exception("Acesso nao permitido: Cookie/Token Invalido", 403);
+            return $decoded_array;
+        } catch (ExpiredException|SignatureInvalidException $ex) {
+            $message = $ex instanceof ExpiredException ? 'Token Expirado' : 'Token Alterado ou Invalido';
+            $this->log->loggerCSV("token_decoded_fail", "tentativa de acesso com $message", 'warning', $_SERVER['REMOTE_ADDR']);
+            throw new Exception("Acesso nao permitido: $message", 403);
         } catch (\Throwable $th) {
             $this->log->loggerCSV("token_decoded_fail", $th->getMessage(), 'warning', $_SERVER['REMOTE_ADDR']);
             throw new Exception("Erro ao processar o Token", 500);
         }
-
-        return $decoded_array;
     }
     public function tokenConst(array $payload)
     {   
